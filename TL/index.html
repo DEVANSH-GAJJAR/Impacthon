@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FieldMonitor Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <header>
+        <div class="brand">
+            <i class="fa-solid fa-leaf"></i> <span>FieldMonitor</span>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#" class="active">Dashboard</a></li>
+                <li><a href="#">Devices & Sensors</a></li>
+                <li><a href="#">Logs</a></li>
+                <li><a href="#">Settings</a></li>
+            </ul>
+        </nav>
+        <div class="header-right">
+            <span>26 Jul 2024 1:30 PM</span>
+        </div>
+    </header>
+
+    <div class="subheader">
+        <h2>Cropfield Water Tank</h2>
+        <div class="subheader-actions">
+            <button class="icon-btn"><i class="fa-solid fa-table-cells-large"></i></button>
+            <button class="icon-btn"><i class="fa-solid fa-rotate-left"></i></button>
+            <button class="icon-btn"><i class="fa-solid fa-lock"></i></button>
+            <button class="icon-btn"><i class="fa-solid fa-bell"></i></button>
+            <button class="icon-btn"><i class="fa-solid fa-tv"></i></button>
+        </div>
+    </div>
+
+    <div class="dashboard-container">
+        
+        <!-- Row 1 -->
+        <div class="card card-tank">
+            <div class="card-header">
+                <span>Water Tank 01</span>
+                <div class="card-actions">
+                    <i class="fa-solid fa-pen"></i>
+                    <i class="fa-solid fa-rotate-right"></i>
+                    <i class="fa-solid fa-gear"></i>
+                </div>
+            </div>
+            <div style="flex:1; position: relative;">
+                <canvas id="tankGauge"></canvas>
+                <div style="position: absolute; bottom: 20%; left: 0; right: 0; text-align: center; color: white; font-size: 1.5rem; font-weight: bold;">65.00</div>
+            </div>
+        </div>
+
+        <div class="card card-location">
+            <div class="card-header">
+                <span>Location</span>
+                <div class="card-actions">
+                    <i class="fa-solid fa-calendar"></i>
+                    <i class="fa-solid fa-download"></i>
+                    <i class="fa-solid fa-pen"></i>
+                    <i class="fa-solid fa-gear"></i>
+                </div>
+            </div>
+            <div class="map-placeholder">
+                <i class="fa-solid fa-location-dot map-pin"></i>
+            </div>
+        </div>
+
+        <div class="card card-temp">
+            <div class="card-header">
+                <span>Current Outside Temp</span>
+                <i class="fa-solid fa-caret-down"></i>
+            </div>
+            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; flex:1;">
+                <span style="color: #666; font-size: 0.8rem;">Last value:</span>
+                <span class="metric-value">84°F</span>
+                <span style="color: #666; font-size: 0.8rem; margin-top: 5px;">10 min ago</span>
+            </div>
+        </div>
+
+        <div class="card card-humidity">
+            <div class="card-header">
+                <span>Humidity</span>
+                <i class="fa-solid fa-caret-down"></i>
+            </div>
+            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; flex:1;">
+                <span style="color: #666; font-size: 0.8rem;">Last value:</span>
+                <span class="metric-value">62%</span>
+                <span style="color: #666; font-size: 0.8rem; margin-top: 5px;">10 min ago</span>
+            </div>
+        </div>
+
+        <!-- Row 2 -->
+        <div class="card card-graph">
+            <div class="card-header">
+                <span>Temperature & Humidity</span>
+                <div class="card-actions">
+                    <i class="fa-solid fa-pen"></i>
+                    <i class="fa-solid fa-rotate-right"></i>
+                    <i class="fa-solid fa-gear"></i>
+                    <i class="fa-solid fa-trash"></i>
+                </div>
+            </div>
+            <div style="flex:1;">
+                <canvas id="tempHumChart"></canvas>
+            </div>
+        </div>
+
+        <div class="card card-water-level">
+            <div class="card-header">
+                <span>Water Level</span>
+                <div class="card-actions">
+                    <i class="fa-solid fa-pen"></i>
+                    <i class="fa-solid fa-gear"></i>
+                    <i class="fa-solid fa-trash"></i>
+                </div>
+            </div>
+            <div style="flex:1; position: relative;">
+                <canvas id="waterLevelChart"></canvas>
+                <div style="position: absolute; top: 50%; left: 0; right: 0; text-align: center; color: black; font-size: 2rem; font-weight: bold; margin-top: -15px;">6</div>
+            </div>
+        </div>
+
+        <!-- Row 3 -->
+        <div class="card card-controls">
+            <div class="card-header">
+                <span>Controls</span>
+                <div class="card-actions">
+                    <i class="fa-solid fa-pen"></i>
+                    <i class="fa-solid fa-gear"></i>
+                    <i class="fa-solid fa-trash"></i>
+                </div>
+            </div>
+            <div class="slider-vertical-container">
+                <div class="slider-group">
+                    <span style="font-size:0.8rem; color:#aaa;">Water Level</span>
+                    <input type="range" class="vertical-range" min="0" max="100" value="60">
+                    <span style="font-size:0.8rem; color:#fff;">6</span>
+                </div>
+                <div class="slider-group">
+                    <span style="font-size:0.8rem; color:#aaa;">Dew Point</span>
+                    <input type="range" class="vertical-range" min="0" max="100" value="36">
+                    <span style="font-size:0.8rem; color:#fff;">36</span>
+                </div>
+                 <div class="slider-group">
+                    <span style="font-size:0.8rem; color:#aaa;">CO</span>
+                    <input type="range" class="vertical-range" min="0" max="1000" value="425">
+                    <span style="font-size:0.8rem; color:#fff;">425</span>
+                </div>
+                 <div class="slider-group">
+                    <span style="font-size:0.8rem; color:#aaa;">Max Humidity</span>
+                    <input type="range" class="vertical-range" min="0" max="100" value="75">
+                    <span style="font-size:0.8rem; color:#fff;">75</span>
+                </div>
+                 <div class="slider-group">
+                    <span style="font-size:0.8rem; color:#aaa;">Max Temp.</span>
+                    <input type="range" class="vertical-range" min="0" max="120" value="92">
+                    <span style="font-size:0.8rem; color:#fff;">92</span>
+                </div>
+                 <div class="slider-group">
+                    <span style="font-size:0.8rem; color:#aaa;">Sprinkler Lvl.</span>
+                    <input type="range" class="vertical-range" min="0" max="10" value="0">
+                    <span style="font-size:0.8rem; color:#fff;">0</span>
+                </div>
+                 <div class="slider-group">
+                    <span style="font-size:0.8rem; color:#aaa;">Drip Lvl.</span>
+                    <input type="range" class="vertical-range" min="0" max="10" value="1">
+                    <span style="font-size:0.8rem; color:#fff;">1</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-toggles-container">
+            <div class="card card-toggle">
+                <div class="card-header" style="width:100%; margin-bottom:0;">
+                    <span>Drip Irrigation System</span>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" checked>
+                    <span class="slider"></span>
+                </label>
+                <div style="color: var(--accent-green); font-size: 0.8em; font-weight: bold;">ON</div>
+            </div>
+            
+             <div class="card card-toggle">
+                <div class="card-header" style="width:100%; margin-bottom:0;">
+                    <span>Sprinkler 01</span>
+                </div>
+                <label class="switch">
+                    <input type="checkbox">
+                    <span class="slider"></span>
+                </label>
+                <div style="color: #666; font-size: 0.8em; font-weight: bold;">OFF</div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

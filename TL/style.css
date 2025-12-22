@@ -1,0 +1,532 @@
+:root {
+    --bg-color: #1a1c23;
+    --card-bg: #21242d;
+    --text-primary: #ffffff;
+    --text-secondary: #a0a0a0;
+    --accent-green: #2ecc71;
+    --accent-gray: #4b5563;
+    --border-radius: 8px;
+    --font-family: 'Inter', sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    font-family: var(--font-family);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Header/Top Bar */
+header {
+    background-color: #13151a;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #333;
+}
+
+.brand {
+    font-size: 1.2rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--accent-green);
+}
+
+.brand span {
+    color: var(--text-primary);
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+}
+
+nav ul li a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+nav ul li a.active,
+nav ul li a:hover {
+    background-color: #2c2f38;
+    color: var(--text-primary);
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+
+/* Sub-header */
+.subheader {
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.subheader h2 {
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.subheader-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.icon-btn {
+    background: #2c2f38;
+    border: none;
+    color: var(--text-secondary);
+    padding: 0.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: 0.2s;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-btn:hover {
+    background: #3a3f4b;
+    color: var(--text-primary);
+}
+
+/* Dashboard Grid */
+.dashboard-container {
+    padding: 0 2rem 2rem;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: auto auto auto;
+    gap: 1.5rem;
+    max-width: 1600px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.card {
+    background-color: var(--card-bg);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+}
+
+.card-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.card-actions i {
+    cursor: pointer;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.card-actions i:hover {
+    color: var(--text-primary);
+}
+
+/* Grid Areas */
+.card-tank {
+    grid-column: span 1;
+    height: 250px;
+}
+
+.card-location {
+    grid-column: span 1;
+    height: 250px;
+}
+
+.card-temp {
+    grid-column: span 1;
+    height: 120px;
+}
+
+.card-humidity {
+    grid-column: span 1;
+    height: 120px;
+}
+
+/* Re-arranging layout to look like image */
+/* Top Row: Tank (1), Location (1), Temp (1) / Humidity (1) stacked */
+.col-right-stacked {
+    grid-column: span 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    height: 250px;
+}
+
+.card-temp,
+.card-humidity {
+    height: 100%;
+    flex: 1;
+}
+
+
+/* Second Row: Chart (2), Water Level (1), Drip/Sprinkler stacked (1)? No.
+   Let's check image layout:
+   Row 1: Tank (1.5), Location (1.5), Temp (0.5), Humidity (0.5)
+   Wait, the image is 3 columns roughly?
+   Tank (1), Location (1), [Temp | Humidity] (1 column split vertically)
+   Better grid: 3 columns.
+*/
+
+.dashboard-container {
+    grid-template-columns: 1.2fr 1.2fr 0.8fr 0.8fr;
+    /* Tank | Location | Temp+Humidity Stacked? No.
+       Image shows: Tank, Location, Temp, Humidity. 4 cols?
+       No, Temp and Humidity are separate small cards on the right.
+       Let's try 3 big columns row 1.
+       Tank | Location | [Temp / Humidity Vertical Stack]
+    */
+    grid-template-columns: repeat(3, 1fr);
+}
+
+/* Adjustments for specific layout */
+.card-tank {
+    grid-column: span 1;
+}
+
+.card-location {
+    grid-column: span 1;
+}
+
+.right-sidebar {
+    grid-column: span 1;
+    display: flex;
+    gap: 1rem;
+}
+
+/* Actually, let's look closer at image.
+   Row 1: Tank (wide), Location (wide), Temp (small), Humidity (small).
+   Row 2: Temp Graph (very wide), Water Level (med).
+   Row 3: Controls (wide), Toggles (small).
+   
+   Grid 12 columns is best for flexibility.
+*/
+.dashboard-container {
+    grid-template-columns: repeat(12, 1fr);
+    grid-auto-rows: minmax(100px, auto);
+}
+
+/* Row 1 */
+.card-tank {
+    grid-column: span 4;
+    grid-row: span 2;
+}
+
+.card-location {
+    grid-column: span 4;
+    grid-row: span 2;
+}
+
+.card-temp {
+    grid-column: span 2;
+    grid-row: span 2;
+}
+
+/* Wait, temp and humidity side by side or stacked? Image: Separate cards side by side in rightmost column? No, they look like 4 columns total. 
+Let's assume 4 equal columns for simplicity first, then span.
+*/
+
+/* Revised Grid: 4 columns */
+.dashboard-container {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.card-tank {
+    grid-column: span 1;
+    height: 200px;
+}
+
+.card-location {
+    grid-column: span 1;
+    height: 200px;
+}
+
+.card-temp {
+    grid-column: span 1;
+    height: 200px;
+}
+
+.card-humidity {
+    grid-column: span 1;
+    height: 200px;
+}
+
+/* Just kidding, the image clearly has sizes. 
+   Tank = 1 unit width
+   Location = 1 unit width
+   Temp = 0.5 unit width? No, they look equal width to others but maybe shorter?
+   Let's stick to strict 4 columns.
+*/
+
+.card-graph {
+    grid-column: span 3;
+    height: 250px;
+}
+
+.card-water-level {
+    grid-column: span 1;
+    height: 250px;
+}
+
+.card-controls {
+    grid-column: span 3;
+    height: 250px;
+}
+
+.card-toggles-container {
+    grid-column: span 1;
+    display: flex;
+    gap: 1.5rem;
+    height: 250px;
+}
+
+.card-toggle {
+    flex: 1;
+    background-color: var(--card-bg);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Content Styling */
+.metric-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--accent-green);
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.metric-label {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+}
+
+/* Toggle Switch */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked+.slider {
+    background-color: var(--accent-green);
+}
+
+input:checked+.slider:before {
+    transform: translateX(26px);
+}
+
+/* Range Slider */
+.slider-vertical-container {
+    display: flex;
+    justify-content: space-around;
+    height: 100%;
+    align-items: flex-end;
+    padding-bottom: 1rem;
+}
+
+.slider-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+input[type=range][orient=vertical] {
+    writing-mode: bt-lr;
+    /* IE */
+    -webkit-appearance: slider-vertical;
+    /* WebKit */
+    width: 8px;
+    height: 100px;
+    padding: 0 5px;
+}
+
+/* Location Map Placeholder */
+.map-placeholder {
+    width: 100%;
+    height: 100%;
+    background-image: url('https://upload.wikimedia.org/wikipedia/commons/e/ec/World_map_blank_without_borders.svg');
+    /* Simple fallback */
+    background-size: cover;
+    background-position: center;
+    border-radius: 4px;
+    opacity: 0.3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.map-pin {
+    color: #fff;
+    font-size: 2rem;
+}
+
+/* Charts containers */
+canvas {
+    width: 100% !important;
+    height: 100% !important;
+    max-height: 180px;
+    /* Constrain height */
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .dashboard-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .card-tank,
+    .card-location,
+    .card-temp,
+    .card-humidity {
+        grid-column: span 1;
+    }
+
+    .card-graph {
+        grid-column: span 2;
+    }
+
+    .card-water-level {
+        grid-column: span 1;
+    }
+
+    /* Fix water level spanning */
+    .card-water-level {
+        grid-column: span 2;
+    }
+
+    /* give it full width on tablet or half? half is good if 2 cols. */
+    .card-water-level {
+        grid-column: span 1;
+    }
+
+    /* Let's keep it 1 and have a gap? Or makes graph 2, water 1, empty 1? No. */
+    /* Let's make graph span 2, water level span 2 on next row */
+    .card-water-level {
+        grid-column: span 2;
+    }
+
+    .card-controls {
+        grid-column: span 2;
+    }
+
+    .card-toggles-container {
+        grid-column: span 2;
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-container {
+        grid-template-columns: 1fr;
+    }
+
+    .card-tank,
+    .card-location,
+    .card-temp,
+    .card-humidity,
+    .card-graph,
+    .card-water-level,
+    .card-controls,
+    .card-toggles-container {
+        grid-column: span 1 !important;
+    }
+
+    .subheader {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .header-right {
+        display: none;
+        /* Hide time on small mobile to save space */
+    }
+
+    nav ul {
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .slider-vertical-container {
+        overflow-x: auto;
+        padding-bottom: 5px;
+        justify-content: start;
+        gap: 20px;
+    }
+}
