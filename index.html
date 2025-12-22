@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>TrustLens – AI Monitoring Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: radial-gradient(circle at top, #0b1022, #050812);
+            color: #e6f1ff;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 220px;
+            height: 100vh;
+            background: linear-gradient(180deg, #0b1022, #050812);
+            position: fixed;
+            padding: 20px;
+            box-shadow: 0 0 30px rgba(0, 234, 255, 0.15);
+        }
+
+        .sidebar h2 {
+            color: #00eaff;
+            text-align: center;
+            text-shadow: 0 0 12px #00eaff;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            padding: 12px;
+            margin: 12px 0;
+            background: rgba(0, 234, 255, 0.05);
+            border: 1px solid rgba(0, 234, 255, 0.2);
+            border-radius: 10px;
+            transition: 0.3s;
+        }
+
+        .sidebar ul li:hover {
+            box-shadow: 0 0 15px rgba(0, 234, 255, 0.6);
+        }
+
+        /* Main */
+        .main {
+            margin-left: 240px;
+            padding: 25px;
+        }
+
+        .card {
+            background: linear-gradient(145deg, #0b1022, #070b1a);
+            padding: 22px;
+            border-radius: 14px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(0, 234, 255, 0.2);
+            box-shadow:
+                0 0 20px rgba(0, 234, 255, 0.15),
+                inset 0 0 10px rgba(0, 234, 255, 0.05);
+        }
+
+        /* Buttons */
+        button {
+            background: transparent;
+            border: 1px solid #ff3860;
+            padding: 12px 18px;
+            border-radius: 10px;
+            color: #ff3860;
+            cursor: pointer;
+            font-size: 14px;
+            text-shadow: 0 0 6px #ff3860;
+            box-shadow: 0 0 15px rgba(255, 56, 96, 0.4);
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #ff3860;
+            color: #050812;
+            box-shadow: 0 0 25px rgba(255, 56, 96, 0.9);
+        }
+
+        /* Alert */
+        .alert {
+            background: rgba(255, 56, 96, 0.15);
+            padding: 14px;
+            border-radius: 10px;
+            border: 1px solid #ff3860;
+            box-shadow: 0 0 20px rgba(255, 56, 96, 0.7);
+            display: none;
+        }
+
+        /* Trust Score */
+        .trust {
+            font-size: 56px;
+            font-weight: bold;
+            color: #00ff9c;
+            text-shadow: 0 0 20px #00ff9c;
+        }
+
+        /* Small text */
+        .small {
+            color: #8ab4f8;
+            font-size: 14px;
+        }
+
+        /* Flex */
+        .flex {
+            display: flex;
+            gap: 20px;
+        }
+
+        .trust {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                text-shadow: 0 0 10px #00ff9c;
+            }
+
+            50% {
+                text-shadow: 0 0 30px #00ff9c;
+            }
+
+            100% {
+                text-shadow: 0 0 10px #00ff9c;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>TrustLens</h2>
+        <ul>
+            <li>Dashboard</li>
+            <li>Live Monitoring</li>
+            <li>Anomalies</li>
+            <li>Trust History</li>
+        </ul>
+    </div>
+
+    <!-- Main -->
+    <div class="main">
+
+        <!-- Top -->
+        <div class="card">
+            <h3>Live API Activity</h3>
+            <canvas id="apiChart"></canvas>
+            <br>
+            <button onclick="simulateAttack()">Simulate Attack</button>
+        </div>
+
+        <!-- Middle -->
+        <div class="flex">
+            <div class="card" style="flex:1">
+                <h3>Trust Score</h3>
+                <div class="trust" id="trustScore">92</div>
+                <div class="small">AI Confidence: 94%</div>
+                <div class="small">SYSTEM STATUS: <span style="color:#00ff9c">STABLE</span></div>
+            </div>
+
+            <div class="card" style="flex:2">
+                <h3>Anomaly Alerts</h3>
+                <div class="alert" id="alertBox">
+                    ⚠️ Brute-force pattern detected on <b>/login</b><br>
+                    Risk Level: HIGH
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let trustScore = 92;
+
+        const ctx = document.getElementById('apiChart').getContext('2d');
+
+        const apiChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['10:00', '10:02', '10:04', '10:06', '10:08', '10:10'],
+                datasets: [{
+                    label: 'API Requests',
+                    data: [120, 130, 140, 135, 150, 145],
+                    borderColor: '#00eaff',
+                    backgroundColor: 'rgba(0,234,255,0.15)',
+                    pointBackgroundColor: '#00ff9c',
+                    tension: 0.4
+                }]
+            },
+            options: {
+                plugins: { legend: { labels: { color: '#fff' } } },
+                scales: {
+                    x: { ticks: { color: '#fff' } },
+                    y: { ticks: { color: '#fff' } }
+                }
+            }
+        });
+
+        function simulateAttack() {
+            apiChart.data.datasets[0].data.push(1200);
+            apiChart.data.labels.push('10:12');
+            apiChart.update();
+
+            document.getElementById("alertBox").style.display = "block";
+
+            trustScore = 68;
+            document.getElementById("trustScore").innerText = trustScore;
+        }
+
+    </script>
+
+</body>
+
+</html>
